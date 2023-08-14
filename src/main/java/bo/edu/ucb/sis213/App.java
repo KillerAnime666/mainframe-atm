@@ -47,13 +47,12 @@ public class App {
             System.exit(1);
         }
         
-
         while (intentos > 0) {
             System.out.print("Ingrese su PIN de 4 dígitos: ");
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
-                mostrarMenu();
+                mostrarMenu(connection);
                 break;
             } else {
                 intentos--;
@@ -85,7 +84,7 @@ public class App {
         return false;
     }
 
-    public static void mostrarMenu() {
+    public static void mostrarMenu(Connection connection) {
         while (true) {
             System.out.println("\nMenú Principal:");
             System.out.println("1. Consultar saldo.");
@@ -98,16 +97,16 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    consultarSaldo();
+                    consultarSaldo(connection);
                     break;
                 case 2:
-                    realizarDeposito();
+                    realizarDeposito(connection);
                     break;
                 case 3:
-                    realizarRetiro();
+                    realizarRetiro(connection);
                     break;
                 case 4:
-                    cambiarPIN();
+                    cambiarPIN(connection);
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
@@ -119,7 +118,7 @@ public class App {
         }
     }
 
-    public static void consultarSaldo() {
+    public static void consultarSaldo(Connection connection) {
         String query = "SELECT saldo FROM usuarios WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -135,7 +134,7 @@ public class App {
         }
     }
 
-    public static void realizarDeposito() {
+    public static void realizarDeposito(Connection connection) {
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
 
@@ -162,7 +161,7 @@ public class App {
         }
     }
 
-    public static void realizarRetiro() {
+    public static void realizarRetiro(Connection connection) {
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
 
@@ -191,11 +190,13 @@ public class App {
         }
     }
 
-    public static void cambiarPIN() {
-        System.out.print("Ingrese su PIN actual: ");
-        int pinIngresado = scanner.nextInt();
+    public static void cambiarPIN(Connection connection) {
+        System.out.print("Ingrese su nuevo PIN: ");
+        int nuevoPin = scanner.nextInt();
+        System.out.print("Confirme su nuevo PIN: ");
+        int confirmacionPin = scanner.nextInt();
 
-        if (pinIngresado == pinActual) {
+        if (nuevoPin == confirmacionPin) {
             String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ? AND pin = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
