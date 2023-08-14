@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class App {
+    private static Scanner scanner = new Scanner(System.in);
+
     private static int usuarioId;
     private static double saldo;
     private static int pinActual;
@@ -32,7 +34,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         int intentos = 3;
 
         System.out.println("Bienvenido al Cajero Automático.");
@@ -85,7 +86,6 @@ public class App {
     }
 
     public static void mostrarMenu() {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenú Principal:");
             System.out.println("1. Consultar saldo.");
@@ -124,7 +124,6 @@ public class App {
     }
 
     public static void realizarDeposito() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
 
@@ -137,7 +136,6 @@ public class App {
     }
 
     public static void realizarRetiro() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
 
@@ -152,7 +150,6 @@ public class App {
     }
 
     public static void cambiarPIN() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese su PIN actual: ");
         int pinIngresado = scanner.nextInt();
 
