@@ -99,3 +99,12 @@ use atm;
 
 5. Ejecutan el script init.sql de la carpeta database.
 
+## Si no funciona Docker
+
+1. Instalar MySQL o XAMPP
+
+2. Hacer los pasos 3 al 5
+
+3. Modificar el archivo MConexion.java y colocar la misma contraseña que en la base de datos
+
+
