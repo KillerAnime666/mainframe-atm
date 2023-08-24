@@ -8,8 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class App {
-    private static Scanner scanner = new Scanner(System.in);
-
+	private static Scanner scanner = new Scanner(System.in);
+	
     private static int usuarioId;
     private static double saldo;
     private static int pinActual;
@@ -23,7 +23,6 @@ public class App {
     public static Connection getConnection() throws SQLException {
         String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DATABASE);
         try {
-            // Asegúrate de tener el driver de MySQL agregado en tu proyecto
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -36,19 +35,19 @@ public class App {
     public static void main(String[] args) {
         int intentos = 3;
 
-        System.out.println("Bienvenido al Cajero Automático.");
+        System.out.println("Bienvenido al Cajero Automatico.");
 
         Connection connection = null;
         try {
-            connection = getConnection(); // Reemplaza esto con tu conexión real
-        } catch (SQLException ex) {
+            connection = getConnection();
+        } catch (SQLException e) {
             System.err.println("No se puede conectar a Base de Datos");
-            ex.printStackTrace();
+            e.printStackTrace();
             System.exit(1);
         }
         
         while (intentos > 0) {
-            System.out.print("Ingrese su PIN de 4 dígitos: ");
+            System.out.print("Ingrese su PIN de 4 digitos: ");
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
@@ -59,7 +58,7 @@ public class App {
                 if (intentos > 0) {
                     System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos.");
                 } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intentos.");
+                    System.out.println("PIN incorrecto. Ha excedido el nÃºmero de intentos.");
                     System.exit(0);
                 }
             }
@@ -86,13 +85,13 @@ public class App {
 
     public static void mostrarMenu(Connection connection) {
         while (true) {
-            System.out.println("\nMenú Principal:");
+            System.out.println("\n Menu Principal:");
             System.out.println("1. Consultar saldo.");
-            System.out.println("2. Realizar un depósito.");
+            System.out.println("2. Realizar un deposito.");
             System.out.println("3. Realizar un retiro.");
             System.out.println("4. Cambiar PIN.");
             System.out.println("5. Salir.");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
             int opcion = scanner.nextInt();
 
             switch (opcion) {
@@ -109,11 +108,11 @@ public class App {
                     cambiarPIN(connection);
                     break;
                 case 5:
-                    System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
+                    System.out.println("Gracias por usar el cajero.");
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Opción no válida. Intente nuevamente.");
+                    System.out.println("Opcion no valida. Intente nuevamente.");
             }
         }
     }
@@ -137,9 +136,9 @@ public class App {
     public static void realizarDeposito(Connection connection) {
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
-
+    
         if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
+            System.out.println("Cantidad no valida.");
         } else {
             String updateQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
             try {
@@ -149,8 +148,7 @@ public class App {
                 int rowsAffected = preparedStatement.executeUpdate();
     
                 if (rowsAffected > 0) {
-                    System.out.println("Depósito realizado con éxito.");
-                    // Registrar la operación de depósito en la tabla historico
+                    System.out.println("Deposito realizado con exito.");
                     registrarOperacionHistorico(connection, "deposito", cantidad);
     
                     consultarSaldo(connection);
@@ -164,9 +162,9 @@ public class App {
     public static void realizarRetiro(Connection connection) {
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
-
+    
         if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
+            System.out.println("Cantidad no valida.");
         } else if (cantidad > saldo) {
             System.out.println("Saldo insuficiente.");
         } else {
@@ -178,8 +176,7 @@ public class App {
                 int rowsAffected = preparedStatement.executeUpdate();
     
                 if (rowsAffected > 0) {
-                    System.out.println("Retiro realizado con éxito.");    
-                    // Registrar la operación de retiro en la tabla historico
+                    System.out.println("Retiro realizado con exito.");
                     registrarOperacionHistorico(connection, "retiro", cantidad);
     
                     consultarSaldo(connection);
@@ -207,7 +204,7 @@ public class App {
 
                 if (rowsAffected > 0) {
                     pinActual = nuevoPin;
-                    System.out.println("PIN actualizado con éxito.");
+                    System.out.println("PIN actualizado con exito.");
                 } else {
                     System.out.println("No se pudo actualizar el PIN.");
                 }
@@ -215,7 +212,7 @@ public class App {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("PIN incorrecto.");
+            System.out.println("Los PINs no coinciden.");
         }
     }
 
@@ -229,7 +226,7 @@ public class App {
             int rowsAffected = preparedStatement.executeUpdate();
     
             if (rowsAffected > 0) {
-                System.out.println("Operación registrada en histórico.");
+                System.out.println("OperaciÃ³n registrada en historico.");
             }
         } catch (Exception e) {
             e.printStackTrace();
