@@ -8,8 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class App {
-	private static Scanner scanner = new Scanner(System.in);
-	
+    private static Scanner scanner = new Scanner(System.in);
+
     private static int usuarioId;
     private static double saldo;
     private static int pinActual;
@@ -35,19 +35,19 @@ public class App {
     public static void main(String[] args) {
         int intentos = 3;
 
-        System.out.println("Bienvenido al Cajero Automatico.");
+        System.out.println("Bienvenido al Cajero Automático.");
 
         Connection connection = null;
         try {
             connection = getConnection();
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             System.err.println("No se puede conectar a Base de Datos");
-            e.printStackTrace();
+            ex.printStackTrace();
             System.exit(1);
         }
         
         while (intentos > 0) {
-            System.out.print("Ingrese su PIN de 4 digitos: ");
+            System.out.print("Ingrese su PIN de 4 dígitos: ");
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
@@ -58,7 +58,7 @@ public class App {
                 if (intentos > 0) {
                     System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos.");
                 } else {
-                    System.out.println("PIN incorrecto. Ha excedido el nÃºmero de intentos.");
+                    System.out.println("PIN incorrecto. Ha excedido el número de intentos.");
                     System.exit(0);
                 }
             }
@@ -85,13 +85,13 @@ public class App {
 
     public static void mostrarMenu(Connection connection) {
         while (true) {
-            System.out.println("\n Menu Principal:");
+            System.out.println("\nMenú Principal:");
             System.out.println("1. Consultar saldo.");
-            System.out.println("2. Realizar un deposito.");
+            System.out.println("2. Realizar un depósito.");
             System.out.println("3. Realizar un retiro.");
             System.out.println("4. Cambiar PIN.");
             System.out.println("5. Salir.");
-            System.out.print("Seleccione una opcion: ");
+            System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
 
             switch (opcion) {
@@ -108,11 +108,11 @@ public class App {
                     cambiarPIN(connection);
                     break;
                 case 5:
-                    System.out.println("Gracias por usar el cajero.");
+                    System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Opcion no valida. Intente nuevamente.");
+                    System.out.println("Opción no válida. Intente nuevamente.");
             }
         }
     }
@@ -138,7 +138,7 @@ public class App {
         double cantidad = scanner.nextDouble();
     
         if (cantidad <= 0) {
-            System.out.println("Cantidad no valida.");
+            System.out.println("Cantidad no válida.");
         } else {
             String updateQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
             try {
@@ -148,7 +148,7 @@ public class App {
                 int rowsAffected = preparedStatement.executeUpdate();
     
                 if (rowsAffected > 0) {
-                    System.out.println("Deposito realizado con exito.");
+                    System.out.println("Depósito realizado con éxito.");
                     registrarOperacionHistorico(connection, "deposito", cantidad);
     
                     consultarSaldo(connection);
@@ -164,7 +164,7 @@ public class App {
         double cantidad = scanner.nextDouble();
     
         if (cantidad <= 0) {
-            System.out.println("Cantidad no valida.");
+            System.out.println("Cantidad no válida.");
         } else if (cantidad > saldo) {
             System.out.println("Saldo insuficiente.");
         } else {
@@ -176,7 +176,7 @@ public class App {
                 int rowsAffected = preparedStatement.executeUpdate();
     
                 if (rowsAffected > 0) {
-                    System.out.println("Retiro realizado con exito.");
+                    System.out.println("Retiro realizado con éxito.");
                     registrarOperacionHistorico(connection, "retiro", cantidad);
     
                     consultarSaldo(connection);
@@ -204,7 +204,7 @@ public class App {
 
                 if (rowsAffected > 0) {
                     pinActual = nuevoPin;
-                    System.out.println("PIN actualizado con exito.");
+                    System.out.println("PIN actualizado con éxito.");
                 } else {
                     System.out.println("No se pudo actualizar el PIN.");
                 }
@@ -226,7 +226,7 @@ public class App {
             int rowsAffected = preparedStatement.executeUpdate();
     
             if (rowsAffected > 0) {
-                System.out.println("OperaciÃ³n registrada en historico.");
+                System.out.println("Operación registrada en histórico.");
             }
         } catch (Exception e) {
             e.printStackTrace();

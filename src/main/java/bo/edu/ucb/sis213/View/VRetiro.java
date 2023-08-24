@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+
+import bo.edu.ucb.sis213.Bl.UsuariosBl;
 
 public class VRetiro extends JFrame {
 
@@ -87,7 +89,7 @@ public class VRetiro extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String mensaje="";
 				try {
-					mensaje = COperacionesATM.realizarRetiro(tfRetiro.getText());
+					mensaje = UsuariosBl.realizarRetiro(tfRetiro.getText());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

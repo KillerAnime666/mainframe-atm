@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 
@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+
+import bo.edu.ucb.sis213.Bl.UsuariosBl;
 
 public class VDeposito extends JFrame {
 
@@ -42,7 +44,7 @@ public class VDeposito extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblDeposito = new JLabel("DepÃ³sito");
+		JLabel lblDeposito = new JLabel("Depósito");
 		lblDeposito.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeposito.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		lblDeposito.setBounds(167, 30, 100, 30);
@@ -65,7 +67,7 @@ public class VDeposito extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String mensaje="";
 				try {
-					mensaje = COperacionesATM.realizarDeposito(tfDeposito.getText());
+					mensaje = UsuariosBl.realizarDeposito(tfDeposito.getText());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

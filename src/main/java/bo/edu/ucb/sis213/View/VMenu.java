@@ -1,10 +1,12 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.Util.UsuarioActivo;
 
 import javax.swing.JLabel;
 import java.awt.Font;

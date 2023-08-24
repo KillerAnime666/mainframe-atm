@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -15,6 +15,10 @@ import javax.swing.JScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+
+import bo.edu.ucb.sis213.Bl.UsuariosBl;
+import bo.edu.ucb.sis213.Bl.HistoricoBl;
+import bo.edu.ucb.sis213.Util.UsuarioActivo;
 
 public class VHistorico extends JFrame {
 
@@ -53,7 +57,7 @@ public class VHistorico extends JFrame {
 		
 		JLabel lblSaldo = new JLabel("");
 		try {
-			lblSaldo.setText(COperacionesATM.consultarSaldo());
+			lblSaldo.setText(UsuariosBl.consultarSaldo());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +70,7 @@ public class VHistorico extends JFrame {
 		taHistorico.setEditable(false);
 		taHistorico.setBackground(new Color(240, 240, 240));
 		try {
-			taHistorico.setText(COperacionesATM.consultarHistoricoCliente(id.getId()));
+			taHistorico.setText(HistoricoBl.consultarHistoricoCliente(id.getId()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -80,8 +84,8 @@ public class VHistorico extends JFrame {
 		btnDAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					lblSaldo.setText(COperacionesATM.consultarSaldo());
-					taHistorico.setText(COperacionesATM.consultarHistoricoCliente(id.getId()));
+					lblSaldo.setText(UsuariosBl.consultarSaldo());
+					taHistorico.setText(HistoricoBl.consultarHistoricoCliente(id.getId()));
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

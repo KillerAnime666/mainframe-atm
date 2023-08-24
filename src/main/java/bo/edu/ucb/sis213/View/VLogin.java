@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -16,13 +16,15 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import bo.edu.ucb.sis213.Bl.UsuariosBl;
+import bo.edu.ucb.sis213.Util.UsuarioActivo;
+
 public class VLogin extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfPin;
 	private JTextField tfUsuario;
 	JLabel lblIntentos = new JLabel("");
-	MValidacion validar = new MValidacion();
 	UsuarioActivo datos = UsuarioActivo.getInstance();
 
 	public static void main(String[] args) {
@@ -80,7 +82,7 @@ public class VLogin extends JFrame {
 		btnSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if(validar.validar(tfUsuario.getText(), tfPin.getText())==-1) {
+					if(UsuariosBl.validar(tfUsuario.getText(), tfPin.getText())==-1) {
 						dispose();
 						VMenu menu = new VMenu();
 						menu.setVisible(true);

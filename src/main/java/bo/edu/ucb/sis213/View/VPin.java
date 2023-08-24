@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.View;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
+
+import bo.edu.ucb.sis213.Bl.UsuariosBl;
 
 public class VPin extends JFrame {
 
@@ -78,7 +80,7 @@ public class VPin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String mensaje="";
 				try {
-					mensaje = COperacionesATM.cambiarPIN(tfPNuevo.getText(), tfPActual.getText());
+					mensaje = UsuariosBl.cambiarPIN(tfPNuevo.getText(), tfPActual.getText());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

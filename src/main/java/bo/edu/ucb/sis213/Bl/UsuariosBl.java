@@ -1,16 +1,43 @@
+package bo.edu.ucb.sis213.Bl;
 
-package bo.edu.ucb.sis213;
-
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class COperacionesATM {
+import bo.edu.ucb.sis213.Dao.MConexion;
+import bo.edu.ucb.sis213.Util.UsuarioActivo;
+
+public class UsuariosBl {
 
     private static int usuarioId;
-    private static double saldo;
+    private static BigDecimal saldo = BigDecimal.ZERO;
 
-    private static int revision;
+    public static int validar(String usuario, String pin) throws IOException, SQLException {
+        UsuarioActivo almacenar = UsuarioActivo.getInstance();
+
+        java.sql.Connection llamar = MConexion.getConnection();
+
+        String consulta = "SELECT * FROM usuarios WHERE usuario = ? AND pin = ?";
+
+        try (PreparedStatement statement = llamar.prepareStatement(consulta)) {
+            statement.setString(1, usuario);
+            statement.setString(2, pin);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                almacenar.setId(rs.getInt("id"));
+                almacenar.setUsuario(rs.getString("usuario"));
+                almacenar.setIntentos(3); 
+                return -1; 
+            }
+        }
+
+        almacenar.setIntentos(almacenar.getIntentos() - 1);
+        return 0; 
+    }
 
     public static String consultarSaldo() throws SQLException {
         java.sql.Connection llamar = MConexion.getConnection();
@@ -25,13 +52,14 @@ public class COperacionesATM {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                double saldo = resultSet.getDouble("saldo");
-                return String.valueOf(saldo);
+                saldo = resultSet.getBigDecimal("saldo");
+                return saldo.toString();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return String.valueOf(saldo);
+
+        return saldo.toString();
     }
 
     public static String realizarDeposito(String deposito) throws SQLException {
@@ -39,23 +67,23 @@ public class COperacionesATM {
             return "Ingrese un valor mayor a 0";
         }
         try {
-            double cantidad = Double.parseDouble(deposito);
+            BigDecimal cantidad = new BigDecimal(deposito);
 
-            if (cantidad > 0) {
+            if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
                 java.sql.Connection llamar = MConexion.getConnection();
                 UsuarioActivo id = UsuarioActivo.getInstance();
                 usuarioId = id.getId();
 
                 String consultaActualizar = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
                 PreparedStatement preparedStatement = llamar.prepareStatement(consultaActualizar);
-                preparedStatement.setDouble(1, cantidad);
+                preparedStatement.setBigDecimal(1, cantidad);
                 preparedStatement.setInt(2, usuarioId);
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    registrarOperacionHistorico("Deposito", cantidad);
-                    return "Deposito realizado con exito. Su saldo es " + consultarSaldo();
+                    HistoricoBl.registrarOperacionHistorico("Deposito", cantidad);
+                    return "Depósito realizado con éxito. Su saldo es " + consultarSaldo();
                 }
             }
 
@@ -70,26 +98,26 @@ public class COperacionesATM {
             return "Ingrese un valor mayor a 0";
         }
         try {
-            double cantidad = Double.parseDouble(retiro);
+            BigDecimal cantidad = new BigDecimal(retiro);
 
-            if (cantidad > Double.parseDouble(consultarSaldo())) {
+            if (cantidad.compareTo(new BigDecimal(consultarSaldo())) > 0) {
                 return "Saldo insuficiente";
             }
-            if (cantidad > 0) {
+            if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
                 java.sql.Connection llamar = MConexion.getConnection();
                 UsuarioActivo id = UsuarioActivo.getInstance();
                 usuarioId = id.getId();
 
                 String consultaActualizar = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?";
                 PreparedStatement preparedStatement = llamar.prepareStatement(consultaActualizar);
-                preparedStatement.setDouble(1, cantidad);
+                preparedStatement.setBigDecimal(1, cantidad);
                 preparedStatement.setInt(2, usuarioId);
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    registrarOperacionHistorico("Retiro", cantidad);
-                    return "Retiro realizado con exito. Su saldo es " + consultarSaldo();
+                    HistoricoBl.registrarOperacionHistorico("Retiro", cantidad);
+                    return "Retiro realizado con éxito. Su saldo es " + consultarSaldo();
                 }
             }
 
@@ -104,8 +132,8 @@ public class COperacionesATM {
             return "No puede dejar los campos vacios";
         }
         try {
-            revision = Integer.parseInt(nuevoPin);
-            revision = Integer.parseInt(pinAnterior);
+            Integer.parseInt(nuevoPin);
+            Integer.parseInt(pinAnterior);
         } catch (NumberFormatException e) {
             return "Ingrese solo numeros";
         }
@@ -132,7 +160,7 @@ public class COperacionesATM {
                         int rowsAffected = preparedStatement.executeUpdate();
 
                         if (rowsAffected > 0) {
-                            return "PIN actualizado con exito.";
+                            return "PIN actualizado con éxito.";
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -147,50 +175,5 @@ public class COperacionesATM {
             return "Error al consultar el PIN actual.";
         }
         return "Error al cambiar el PIN.";
-    }
-
-    public static void registrarOperacionHistorico(String tipoOperacion, double cantidad) throws SQLException {
-        java.sql.Connection llamar = MConexion.getConnection();
-        UsuarioActivo id = UsuarioActivo.getInstance();
-        usuarioId = id.getId();
-
-        String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = llamar.prepareStatement(insertQuery);
-            preparedStatement.setInt(1, usuarioId);
-            preparedStatement.setString(2, tipoOperacion);
-            preparedStatement.setDouble(3, cantidad);
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String consultarHistoricoCliente(int idCliente) throws SQLException {
-        java.sql.Connection llamar = MConexion.getConnection();
-
-        String consultaHistorico = "SELECT tipo_operacion, cantidad FROM historico WHERE usuario_id = ?";
-        try {
-            PreparedStatement preparedStatement = llamar.prepareStatement(consultaHistorico);
-            preparedStatement.setInt(1, idCliente);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            StringBuilder historico = new StringBuilder();
-            historico.append("Monto | Tipo Operacion\n");
-
-            while (resultSet.next()) {
-                String tipoOperacion = resultSet.getString("tipo_operacion");
-                double cantidad = resultSet.getDouble("cantidad");
-
-                String signoMonto = tipoOperacion.equalsIgnoreCase("retiro") ? "-" : "+";
-                historico.append(String.format("%s%.2f  %s\n", signoMonto, cantidad, tipoOperacion));
-            }
-
-            return historico.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "Error al consultar el historial del cliente.";
     }
 }
