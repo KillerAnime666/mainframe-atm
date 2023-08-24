@@ -48,7 +48,7 @@ public class VMenu extends JFrame {
 		lblBienvenido.setBounds(17, 20, 400, 30);
 		contentPane.add(lblBienvenido);
 		
-		JButton btnDeposito = new JButton("DEPÃ“SITO");
+		JButton btnDeposito = new JButton("DEPOSITO");
 		btnDeposito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -109,7 +109,7 @@ public class VMenu extends JFrame {
 		btnCierre.setBounds(157, 205, 120, 30);
 		contentPane.add(btnCierre);
 		
-		JLabel lblOperacion = new JLabel("Â¿QuÃ© le gustarÃ­a hacer a continuaciÃ³n?");
+		JLabel lblOperacion = new JLabel("¿Quw le gustari­a hacer a continuacion?");
 		lblOperacion.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		lblOperacion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOperacion.setBounds(67, 60, 300, 20);

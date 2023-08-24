@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class MConexion {
 	
 	private static final String USER = "root";
-	private static final String PASSWORD = "123456";
+	private static final String PASSWORD = "";
 	private static final String HOST = "127.0.0.1";
 	private static final String DATABASE = "atm";
 	private static final int PORT = 3306;

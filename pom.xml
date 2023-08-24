@@ -24,4 +24,27 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <!-- Add the exec-maven-plugin configuration here -->
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+                <execution>
+                    <id>execute-my-class</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>java</goal>
+                    </goals>
+                    <configuration>
+                        <mainClass>bo.edu.ucb.sis213.View.VLogin</mainClass>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
 </project>
