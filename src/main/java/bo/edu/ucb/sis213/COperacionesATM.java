@@ -10,6 +10,8 @@ public class COperacionesATM {
     private static int usuarioId;
     private static double saldo;
 
+    private static int revision;
+
     public static String consultarSaldo() throws SQLException {
         java.sql.Connection llamar = MConexion.getConnection();
 
@@ -87,7 +89,7 @@ public class COperacionesATM {
 
                 if (rowsAffected > 0) {
                     registrarOperacionHistorico("Retiro", cantidad);
-                    return "Retiro realizado con Ã©xito. Su saldo es " + consultarSaldo();
+                    return "Retiro realizado con exito. Su saldo es " + consultarSaldo();
                 }
             }
 
@@ -102,7 +104,6 @@ public class COperacionesATM {
             return "No puede dejar los campos vacios";
         }
         try {
-            int revision;
             revision = Integer.parseInt(nuevoPin);
             revision = Integer.parseInt(pinAnterior);
         } catch (NumberFormatException e) {
@@ -131,7 +132,7 @@ public class COperacionesATM {
                         int rowsAffected = preparedStatement.executeUpdate();
 
                         if (rowsAffected > 0) {
-                            return "PIN actualizado con Ã©xito.";
+                            return "PIN actualizado con exito.";
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -165,11 +166,9 @@ public class COperacionesATM {
         }
     }
 
-    // MÃ©todo para consultar el historial de un cliente
     public static String consultarHistoricoCliente(int idCliente) throws SQLException {
         java.sql.Connection llamar = MConexion.getConnection();
 
-        // Consulta SQL para obtener historial del cliente
         String consultaHistorico = "SELECT tipo_operacion, cantidad FROM historico WHERE usuario_id = ?";
         try {
             PreparedStatement preparedStatement = llamar.prepareStatement(consultaHistorico);
@@ -179,7 +178,6 @@ public class COperacionesATM {
             StringBuilder historico = new StringBuilder();
             historico.append("Monto | Tipo Operacion\n");
 
-            // Mientras haya resultados, aÃ±ade la operaciÃ³n y la cantidad al historial
             while (resultSet.next()) {
                 String tipoOperacion = resultSet.getString("tipo_operacion");
                 double cantidad = resultSet.getDouble("cantidad");
